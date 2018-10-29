@@ -1,18 +1,45 @@
 package ie.ul.serge.moviequotes;
 
 import android.support.annotation.NonNull;
+import android.support.constraint.solver.widgets.Snapshot;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Inflater;
 
 public class MovieQuoteAdapter extends RecyclerView.Adapter<MovieQuoteAdapter.MoviewQuoteViewHolder>{
 
+    private List<DocumentSnapshot> mMovieQuotesSnapshots = new ArrayList<>();
+    public MovieQuoteAdapter(){
+        CollectionReference moviequotesRef = FirebaseFirestore.getInstance()
+                .collection(Constants.MOVIEQUOTES_COLLECTION);
+        moviequotesRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+               if(e!=null){
+                   Log.w(Constants.TAG,"Listening failed");
+                   return;
+               }
+               mMovieQuotesSnapshots = documentSnapshots.getDocuments();
+               notifyDataSetChanged();
+            }
+        });
+    }
     @NonNull
     @Override
     public MoviewQuoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -23,12 +50,18 @@ public class MovieQuoteAdapter extends RecyclerView.Adapter<MovieQuoteAdapter.Mo
 
     @Override
     public void onBindViewHolder(@NonNull MoviewQuoteViewHolder moviewQuoteViewHolder, int i) {
+        DocumentSnapshot ds = mMovieQuotesSnapshots.get(i);
+        String quote = (String)ds.get(Constants.QUOTE_KEY);
+        String movie = (String)ds.get(Constants.MOVIE_KEY);
+
+        moviewQuoteViewHolder.mQuoteTextView.setText(quote);
+        moviewQuoteViewHolder.mMovieTextView.setText(movie);
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mMovieQuotesSnapshots.size();
     }
 
     class MoviewQuoteViewHolder extends RecyclerView.ViewHolder{

@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    //public static final String TAG = "MQ";
+
     //private int mQuoteNr = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
