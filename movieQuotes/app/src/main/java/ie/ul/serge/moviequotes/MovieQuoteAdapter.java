@@ -82,10 +82,13 @@ public class MovieQuoteAdapter extends RecyclerView.Adapter<MovieQuoteAdapter.Mo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //get snapshot of the document (identify that by adapter position)
+                    DocumentSnapshot ds = mMovieQuotesSnapshots.get(getAdapterPosition());
                     //get context to pass over to the card
                     Context context = itemView.getContext();
                     //set intent to bring up detailed view for the card
                     Intent intent = new Intent(context,MovieQuoteDetailActivity.class);
+                    intent.putExtra(Constants.EXTRA_DOC_ID,ds.getId());
                     //bring up detailed view for the card
                     context.startActivity(intent);
                 }
