@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mq.put(Constants.QUOTE_KEY, editQuoteText.getText().toString() );
                 mq.put(Constants.MOVIE_KEY, editMovieText.getText().toString() );
+                mq.put(Constants.CREATED_KEY, new Date());
 
                 FirebaseFirestore.getInstance().collection(Constants.MOVIEQUOTES_COLLECTION).add(mq);
 
