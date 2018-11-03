@@ -1,5 +1,7 @@
 package ie.ul.serge.moviequotes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.solver.widgets.Snapshot;
 import android.support.v7.widget.RecyclerView;
@@ -72,10 +74,22 @@ public class MovieQuoteAdapter extends RecyclerView.Adapter<MovieQuoteAdapter.Mo
         private TextView mMovieTextView;
 
 
-        public MoviewQuoteViewHolder(@NonNull View itemView) {
+        public MoviewQuoteViewHolder(@NonNull final View itemView) {
             super(itemView);
             mQuoteTextView = itemView.findViewById(R.id.itemview_quote);
             mMovieTextView = itemView.findViewById(R.id.itemview_movie);
+            //set on click listener to tie this card to detailed view
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //get context to pass over to the card
+                    Context context = itemView.getContext();
+                    //set intent to bring up detailed view for the card
+                    Intent intent = new Intent(context,MovieQuoteDetailActivity.class);
+                    //bring up detailed view for the card
+                    context.startActivity(intent);
+                }
+            });
 
         }
     }
