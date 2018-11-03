@@ -71,8 +71,8 @@ public class MovieQuoteAdapter extends RecyclerView.Adapter<MovieQuoteAdapter.Mo
 
         public MoviewQuoteViewHolder(@NonNull View itemView) {
             super(itemView);
-            mQuoteTextView = itemView.findViewById(R.id.itemview_movie);
-            mMovieTextView = itemView.findViewById(R.id.itemview_quote);
+            mQuoteTextView = itemView.findViewById(R.id.itemview_quote);
+            mMovieTextView = itemView.findViewById(R.id.itemview_movie);
 
         }
     }
