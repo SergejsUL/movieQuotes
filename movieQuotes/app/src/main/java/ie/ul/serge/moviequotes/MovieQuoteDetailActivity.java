@@ -81,7 +81,9 @@ public class MovieQuoteDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_delete:
-                //TODO write code for deleting activity
+             mDocRef.delete();
+             //close this activity
+             finish();
              return true;
         }
 
