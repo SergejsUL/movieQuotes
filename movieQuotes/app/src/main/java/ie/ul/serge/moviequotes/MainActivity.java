@@ -1,9 +1,11 @@
 package ie.ul.serge.moviequotes;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Adapter;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -68,25 +71,35 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-/*                //Firebase code
-
-
-                // Create a new user with a first and last name
-                mQuoteNr=mQuoteNr+1;
-                Map<String, Object> mq = new HashMap<>();
-                mq.put("movie", "Movie Nr: " + mQuoteNr);
-                mq.put("quote", "Quote Nr: " + mQuoteNr);
-
-                // Add a new document with a generated ID
-                db.collection("moviedatabase").add(mq);
-
-                //end of firebase code*/
-
-
-                Snackbar.make(view, "Added movie and quote", Snackbar.LENGTH_LONG).show();
+                showAddDialogue();
 
             }
         });
+    }
+
+    private void showAddDialogue() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.moviequote_dialogue,null,false);
+        builder.setView(view);
+        final TextView editQuoteText = view.findViewById(R.id.input_quote);
+        final TextView editMovieText = view.findViewById(R.id.input_movie);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Map<String, Object> mq = new HashMap<>();
+
+                mq.put(Constants.QUOTE_KEY, editQuoteText.getText().toString() );
+                mq.put(Constants.MOVIE_KEY, editMovieText.getText().toString() );
+
+                FirebaseFirestore.getInstance().collection(Constants.MOVIEQUOTES_COLLECTION).add(mq);
+
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel,null);
+
+        builder.create().show();
     }
 
 }
