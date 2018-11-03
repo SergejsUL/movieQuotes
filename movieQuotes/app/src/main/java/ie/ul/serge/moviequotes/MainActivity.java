@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(view);
         final TextView editQuoteText = view.findViewById(R.id.input_quote);
         final TextView editMovieText = view.findViewById(R.id.input_movie);
-
+        builder.setTitle("Add new quote");
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

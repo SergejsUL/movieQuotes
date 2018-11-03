@@ -1,9 +1,11 @@
 package ie.ul.serge.moviequotes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +21,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.w3c.dom.Text;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MovieQuoteDetailActivity extends AppCompatActivity {
 
@@ -66,10 +72,39 @@ public class MovieQuoteDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+                showEditDialogue();
+               }
         });
+    }
+
+    private void showEditDialogue() {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View view = getLayoutInflater().inflate(R.layout.moviequote_dialogue,null,false);
+            builder.setView(view);
+            final TextView editQuoteText = view.findViewById(R.id.input_quote);
+            final TextView editMovieText = view.findViewById(R.id.input_movie);
+
+        editQuoteText.setText((String)mDocSnap.get(Constants.QUOTE_KEY));
+        editMovieText.setText((String)mDocSnap.get(Constants.MOVIE_KEY));
+            builder.setTitle("Edit this quote");
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Map<String, Object> mq = new HashMap<>();
+
+                    mq.put(Constants.QUOTE_KEY, editQuoteText.getText().toString() );
+                    mq.put(Constants.MOVIE_KEY, editMovieText.getText().toString() );
+                    mq.put(Constants.CREATED_KEY, new Date());
+                    mDocRef.update(mq);
+
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel,null);
+
+            builder.create().show();
+
     }
 
     @Override
